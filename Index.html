@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#D4480A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Aditya PEB</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',sans-serif;background:#F0F2F5;min-height:100vh;max-width:480px;margin:0 auto}
+.hdr{background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:3px solid #D4480A;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.hdr img{width:40px;height:40px;object-fit:contain}
+.hdr-co{font-size:16px;font-weight:800;color:#1a1a2e;flex:1}.hdr-co span{color:#D4480A}
+.hdr-sub{font-size:9px;color:#999;letter-spacing:1px;text-transform:uppercase}
+.hdr-info{text-align:right}.hdr-date{font-size:10px;color:#999}.hdr-user{font-size:11px;font-weight:700;color:#D4480A}
+.dash-btn{background:#F0EEFF;border:2px solid #533AB7;border-radius:10px;padding:6px 10px;cursor:pointer;display:none;flex-direction:column;align-items:center;min-width:52px}
+.dash-btn .di{font-size:14px}.dash-btn .dt{font-size:8px;font-weight:800;color:#533AB7}
+.screen{display:none;padding:14px 14px 80px}.screen.active{display:block}
+.hero{background:#fff;border-radius:14px;padding:28px 20px;text-align:center;margin-bottom:16px}
+.hero img{width:80px;height:80px;object-fit:contain;margin-bottom:12px}
+.hero h1{font-size:22px;font-weight:800;color:#1a1a2e}.hero h1 span{color:#D4480A}
+.hero p{font-size:12px;color:#999;margin-top:4px}
+.sec-lbl{font-size:11px;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:block}
+.nlist{display:flex;flex-direction:column;gap:8px}
+.nrow{background:#fff;border:2px solid #eee;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.nrow.sel{border-color:#D4480A;background:#FFF5F1}
+.nav{width:38px;height:38px;border-radius:50%;background:#F0F2F5;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#555;flex-shrink:0}
+.nrow.sel .nav{background:#D4480A;color:#fff}
+.nname{font-size:14px;font-weight:700;color:#1a1a2e}.nrole{font-size:11px;color:#888}
+.ntick{margin-left:auto;color:#D4480A;font-size:18px;display:none}.nrow.sel .ntick{display:block}
+.pin-box{background:#fff;border-radius:16px;padding:24px 18px;margin-top:10px}
+.pin-title{font-size:18px;font-weight:800;color:#1a1a2e;text-align:center;margin-bottom:4px}
+.pin-sub{font-size:12px;color:#888;text-align:center;margin-bottom:16px}
+.pin-disp{font-size:32px;font-weight:800;letter-spacing:10px;text-align:center;background:#F0F2F5;border-radius:12px;padding:14px;margin-bottom:16px;color:#1a1a2e;min-height:60px;display:flex;align-items:center;justify-content:center}
+.pin-disp.has{color:#D4480A}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pbtn{background:#fff;border:2px solid #eee;border-radius:12px;padding:16px;font-size:20px;font-weight:800;color:#1a1a2e;text-align:center;cursor:pointer;transition:all .1s}
+.pbtn:active{background:#F0F2F5;transform:scale(0.96)}
+.p-del{background:#FEE;border-color:#FCC;color:#c00}.p-ok{background:#D4480A;border-color:#D4480A;color:#fff}
+.pin-err{text-align:center;color:#c00;font-size:13px;font-weight:700;margin-top:10px;min-height:20px}
+.pin-warn{text-align:center;color:#854F0B;font-size:11px;margin-top:6px;min-height:16px}
+.back-lnk{width:100%;background:none;border:2px solid #ddd;border-radius:12px;padding:13px;font-size:14px;font-weight:700;color:#888;cursor:pointer;margin-top:12px}
+.chip{background:#fff;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.chip-av{width:36px;height:36px;border-radius:50%;background:#D4480A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.chip-name{font-size:14px;font-weight:700;color:#1a1a2e}.chip-role{font-size:11px;color:#888}
+.change-btn{margin-left:auto;border:2px solid #D4480A;background:none;color:#D4480A;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.net-bar{text-align:center;margin-bottom:12px}
+.net-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;background:#E8F5EE;color:#1a6b3c}
+.net-pill.off{background:#FEE;color:#c00}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.ugrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ubtn{background:#fff;border:2px solid #ddd;border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:transform .12s}
+.ubtn:active{transform:scale(0.94)}
+.ubtn .ico{font-size:30px;display:block;margin-bottom:8px}
+.ubtn .lbl{font-size:13px;font-weight:800;color:#1a1a2e;display:block;margin-bottom:3px}
+.ubtn .sub{font-size:10px;color:#888;display:block;line-height:1.4}
+.ubtn.full{grid-column:1/-1}
+.u-site{border-color:#1a6b3c}.u-fab{border-color:#185FA5}.u-draw{border-color:#854F0B}.u-accts{border-color:#7B1212}.u-dispatch{border-color:#D4480A}
+.proj-files{margin-top:16px}
+.pfile-card{background:#fff;border:2px solid #eee;border-radius:12px;padding:11px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.pfile-info{flex:1}.pfile-pid{font-size:12px;font-weight:800;color:#D4480A}
+.pfile-client{font-size:13px;font-weight:700;color:#1a1a2e}
+.pfile-stage{font-size:10px;color:#888;margin-top:2px}
+.pbar-mini{flex:1;height:5px;background:#F0F2F5;border-radius:3px;overflow:hidden;margin-top:4px}
+.pbar-mini-fill{height:100%;background:#D4480A;border-radius:3px}
+.file-btn{background:#E8F5EE;border:2px solid #9FE1CB;border-radius:10px;padding:8px 12px;font-size:11px;font-weight:800;color:#1a6b3c;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.file-btn.disabled{background:#F0F2F5;border-color:#eee;color:#ccc;cursor:not-allowed}
+.fhdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:2px solid #eee}
+.fbk{width:38px;height:38px;background:#F0F2F5;border:none;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ftitle{font-size:17px;font-weight:800;color:#1a1a2e}
+.err-box{background:#FEE;border:2px solid #FCC;border-radius:10px;padding:10px 14px;font-size:13px;color:#c00;font-weight:700;margin-bottom:12px;display:none}
+.err-box.show{display:block}
+.upby{background:#FFF5E8;border:2px solid #FAC775;border-radius:10px;padding:8px 14px;font-size:12px;color:#854F0B;font-weight:700;margin-bottom:10px}
+.gps-box{border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;margin-bottom:10px;background:#EEF4FC;color:#185FA5;border:2px solid #B5D4F4}
+.gps-box.ok{background:#E8F5EE;color:#1a6b3c;border-color:#9FE1CB}
+.gps-box.fail{background:#FEE;color:#c00;border-color:#FCC}
+.fg{margin-bottom:12px}
+.fl{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.req{color:#D4480A}
+select,input[type=text],input[type=number],input[type=date],textarea{width:100%;background:#fff;border:2px solid #ddd;border-radius:10px;color:#1a1a2e;font-size:15px;padding:11px 13px;outline:none;font-family:inherit;-webkit-appearance:none}
+select:focus,input:focus,textarea:focus{border-color:#D4480A}
+textarea{resize:none;min-height:70px}
+.uarea{background:#fff;border:2px dashed #ddd;border-radius:14px;padding:14px;margin-bottom:12px}
+.uarea.has{border-color:#1a6b3c;border-style:solid}
+.urow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ufbtn{background:#F0F2F5;border:2px solid #ddd;border-radius:10px;padding:13px 8px;text-align:center;cursor:pointer}
+.ufbtn .uico{font-size:22px;display:block;margin-bottom:3px}
+.ufbtn .utxt{font-size:12px;font-weight:700}
+.ufbtn.cam{border-color:#1a6b3c;color:#1a6b3c}.ufbtn.gal{border-color:#185FA5;color:#185FA5}
+input[type=file]{display:none}
+.uhint{font-size:11px;color:#aaa;text-align:center;margin-bottom:8px}
+.uctr{font-size:12px;font-weight:700;color:#1a6b3c;text-align:center;margin-bottom:8px}
+.pgrid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.pitem{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#F0F2F5;border:2px solid #ddd}
+.pitem img{width:100%;height:100%;object-fit:cover}
+.pitem .pdoc{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;color:#666;font-weight:700}
+.pitem .pdoc span{font-size:22px}
+.prm{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);border:none;color:#fff;width:20px;height:20px;border-radius:50%;font-size:10px;cursor:pointer}
+.submit-btn{width:100%;background:#D4480A;border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:800;padding:16px;cursor:pointer;margin-top:6px}
+.submit-btn:disabled{opacity:.3}
+.loader{display:none;position:fixed;inset:0;background:rgba(255,255,255,.92);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.loader.show{display:flex}
+.spin{width:44px;height:44px;border:4px solid #eee;border-top-color:#D4480A;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ltxt{font-size:14px;color:#555;font-weight:600;text-align:center;padding:0 20px}
+.pbar-l{width:200px;height:5px;background:#eee;border-radius:3px;overflow:hidden}
+.pfill{height:100%;background:#D4480A;border-radius:3px;width:0;transition:width .3s}
+.succ{text-align:center;padding:40px 16px}
+.succ .si{font-size:64px;margin-bottom:12px}
+.succ h2{font-size:22px;font-weight:800;color:#1a6b3c;margin-bottom:8px}
+.succ p{font-size:13px;color:#666;line-height:1.6;margin-bottom:14px}
+.sdet{background:#fff;border:2px solid #eee;border-radius:12px;padding:14px;font-size:12px;color:#444;text-align:left;line-height:1.9;margin-bottom:16px}
+.sdet b{color:#1a1a2e}
+.home-btn{width:100%;background:#1a1a2e;border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;padding:15px;cursor:pointer}
+.db-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.db-title{font-size:17px;font-weight:800;color:#1a1a2e}
+.db-time{font-size:11px;color:#aaa;margin-bottom:14px}
+.db-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.tab{background:#fff;border:2px solid #ddd;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;color:#888;cursor:pointer;white-space:nowrap}
+.tab.on{background:#D4480A;border-color:#D4480A;color:#fff}
+.tab-pane{display:none}.tab-pane.on{display:block}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.sc{border-radius:12px;padding:12px;text-align:center}
+.sc-val{font-size:22px;font-weight:800;line-height:1}
+.sc-lbl{font-size:10px;font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+.sc-grn{background:#E8F5EE}.sc-grn .sc-val,.sc-grn .sc-lbl{color:#1a6b3c}
+.sc-amb{background:#FFF5E0}.sc-amb .sc-val,.sc-amb .sc-lbl{color:#854F0B}
+.sc-red{background:#FEE}.sc-red .sc-val,.sc-red .sc-lbl{color:#c00}
+.sc-blu{background:#EEF4FC}.sc-blu .sc-val,.sc-blu .sc-lbl{color:#185FA5}
+.pcard{background:#fff;border:2px solid #eee;border-radius:14px;padding:14px;margin-bottom:10px}
+.pcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.ppid{font-size:11px;font-weight:800;color:#D4480A}
+.pclient{font-size:14px;font-weight:800;color:#1a1a2e}
+.stbadge{font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px}
+.st-design{background:#EEF4FC;color:#185FA5}.st-fabrication{background:#FFF5E0;color:#854F0B}
+.st-dispatch{background:#FFF5F1;color:#D4480A}.st-erection{background:#E8F5EE;color:#1a6b3c}
+.st-handover,.st-completed{background:#F0EEFF;color:#533AB7}
+.pbar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pbar-wrap{flex:1;height:8px;background:#F0F2F5;border-radius:4px;overflow:hidden}
+.pbar-fill{height:100%;background:#D4480A;border-radius:4px}
+.ppct{font-size:13px;font-weight:800;color:#1a1a2e;min-width:34px;text-align:right}
+.pmeta{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:#888;margin-bottom:10px}
+.pmeta b{color:#1a1a2e;font-weight:700}
+.delay-ok{background:#E8F5EE;color:#1a6b3c;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px}
+.delay-risk{background:#FFF5E0;color:#854F0B;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px}
+.delay-late{background:#FEE;color:#c00;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px}
+.card-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.edit-btn{background:#F0F2F5;border:2px solid #ddd;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#555;cursor:pointer;text-align:center}
+.edit-btn.green{border-color:#9FE1CB;color:#1a6b3c;background:#E8F5EE}
+.paycard{background:#fff;border:2px solid #eee;border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.pay-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.pay-amts{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#888}
+.pay-amts b{color:#1a1a2e;font-weight:800}
+.pstat{font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px}
+.ps-paid{background:#E8F5EE;color:#1a6b3c}.ps-partial{background:#FFF5E0;color:#854F0B}
+.ps-pending,.ps-overdue{background:#FEE;color:#c00}
+.arow{background:#fff;border:2px solid #eee;border-radius:10px;padding:9px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.none-msg{text-align:center;padding:24px;font-size:13px;color:#aaa}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px 40px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-title{font-size:16px;font-weight:800;color:#1a1a2e}
+.modal-close{background:none;border:none;font-size:22px;color:#888;cursor:pointer;line-height:1}
+.modal-btn{width:100%;background:#D4480A;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;padding:15px;cursor:pointer;margin-top:8px}
+.modal-btn.grey{background:#F0F2F5;color:#555}
+.np-tile{background:#1a1a2e;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:14px}
+.np-tile .ni{font-size:22px}
+.np-tile .nl{font-size:14px;font-weight:800;color:#fff}
+.np-tile .ns{font-size:11px;color:#aaa;margin-top:1px}
+.np-tile .na{margin-left:auto;color:#aaa;font-size:18px}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="spin"></div><div class="ltxt" id="ltxt">Please wait...</div><div class="pbar-l"><div class="pfill" id="pfill"></div></div></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <img id="hdrLogo" alt="AG">
+  <div style="flex:1"><div class="hdr-co">Aditya <span>Group</span></div><div class="hdr-sub">PEB Management</div></div>
+  <div class="hdr-info"><div class="hdr-date" id="hda"></div><div class="hdr-user" id="huser"></div></div>
+  <div class="dash-btn" id="dashBtn"><span class="di">&#128202;</span><span class="dt">MD Dash</span></div>
+</div>
+
+<!-- NAME SCREEN -->
+<div class="screen active" id="s-name">
+  <div class="hero">
+    <img id="heroLogo" alt="Aditya Group">
+    <h1>Aditya <span>Group</span></h1><p>PEB Project Management System</p>
+  </div>
+  <div class="np-tile" id="newProjTile">
+    <span class="ni">&#43;</span>
+    <div><div class="nl">Naya Project</div><div class="ns">Authorized PIN required</div></div>
+    <span class="na">&#8250;</span>
+  </div>
+  <span class="sec-lbl">Apna naam select karo</span>
+  <div class="nlist" id="nlist"></div>
+</div>
+
+<!-- LOGIN PIN -->
+<div class="screen" id="s-login">
+  <div class="pin-box">
+    <div class="pin-title" id="ltitle">Login</div>
+    <div class="pin-sub">4-digit PIN daalo</div>
+    <div class="pin-disp" id="ldisp">&#8212;&#8212;&#8212;&#8212;</div>
+    <div class="pgrid">
+      <div class="pbtn" data-lp="1">1</div><div class="pbtn" data-lp="2">2</div><div class="pbtn" data-lp="3">3</div>
+      <div class="pbtn" data-lp="4">4</div><div class="pbtn" data-lp="5">5</div><div class="pbtn" data-lp="6">6</div>
+      <div class="pbtn" data-lp="7">7</div><div class="pbtn" data-lp="8">8</div><div class="pbtn" data-lp="9">9</div>
+      <div class="pbtn p-del" id="lpDel">&#9003;</div><div class="pbtn" data-lp="0">0</div><div class="pbtn p-ok" id="lpOk">&#10003;</div>
+    </div>
+    <div class="pin-err" id="lerr"></div><div class="pin-warn" id="lwarn"></div>
+  </div>
+  <button class="back-lnk" id="loginBack">&#8592; Naam badlo</button>
+</div>
+
+<!-- NEW PROJECT PIN -->
+<div class="screen" id="s-newproj-pin">
+  <div class="pin-box">
+    <div class="pin-title">&#127959; Naya Project</div>
+    <div class="pin-sub">Authorized PIN daalo</div>
+    <div class="pin-disp" id="npdisp">&#8212;&#8212;&#8212;&#8212;</div>
+    <div class="pgrid">
+      <div class="pbtn" data-np="1">1</div><div class="pbtn" data-np="2">2</div><div class="pbtn" data-np="3">3</div>
+      <div class="pbtn" data-np="4">4</div><div class="pbtn" data-np="5">5</div><div class="pbtn" data-np="6">6</div>
+      <div class="pbtn" data-np="7">7</div><div class="pbtn" data-np="8">8</div><div class="pbtn" data-np="9">9</div>
+      <div class="pbtn p-del" id="npDel">&#9003;</div><div class="pbtn" data-np="0">0</div><div class="pbtn p-ok" id="npOk">&#10003;</div>
+    </div>
+    <div class="pin-err" id="nperr"></div>
+  </div>
+  <button class="back-lnk" id="npBack">&#8592; Wapas</button>
+</div>
+
+<!-- NEW PROJECT FORM -->
+<div class="screen" id="s-newproj">
+  <div class="fhdr"><button class="fbk" id="npFormBack">&#8592;</button><span style="font-size:22px">&#127959;</span><span class="ftitle">Naya Project</span></div>
+  <div class="err-box" id="npErr"></div>
+  <div class="fg"><label class="fl">Client Name <span class="req">*</span></label><input type="text" id="npClient" placeholder="Jaise: Parvati Infra"></div>
+  <div class="fg"><label class="fl">Project Name <span class="req">*</span></label><input type="text" id="npProjName" placeholder="Jaise: Warehouse Kanpur"></div>
+  <div class="fg"><label class="fl">Scope <span class="req">*</span></label><input type="text" id="npScope" placeholder="Jaise: 40x80x8.5m PEB Warehouse"></div>
+  <div class="fg"><label class="fl">Client Phone</label><input type="text" id="npPhone" placeholder="WhatsApp number"></div>
+  <div class="fg"><label class="fl">Engineer</label>
+    <select id="npEngineer"><option value="">-- Select karo --</option><option>Aniket Sharma</option><option>Arpit Kushwaha</option><option>Ankush Kumar</option><option>Nitish</option><option>Sachin</option></select>
+  </div>
+  <div class="fg"><label class="fl">Target Date</label><input type="date" id="npTarget"></div>
+  <div class="fg"><label class="fl">Contract Value (Rs) <span class="req">*</span></label><input type="number" id="npValue" placeholder="3115000"></div>
+  <div class="fg"><label class="fl">Total Tonnage (T) <span class="req">*</span></label><input type="number" id="npTonnage" placeholder="350"></div>
+  <span class="sec-lbl" style="margin-top:8px">BOQ</span>
+  <div class="fg"><label class="fl">Primary Steel (kg)</label><input type="number" id="npBoqPrimary" placeholder="280000"></div>
+  <div class="fg"><label class="fl">Secondary Steel (kg)</label><input type="number" id="npBoqSecondary" placeholder="45000"></div>
+  <div class="fg"><label class="fl">Roofing Sheets (sqm)</label><input type="number" id="npBoqRoofing" placeholder="3200"></div>
+  <div class="fg"><label class="fl">Cladding Sheets (sqm)</label><input type="number" id="npBoqCladding" placeholder="1800"></div>
+  <div class="fg"><label class="fl">Fasteners & Misc (Rs)</label><input type="number" id="npBoqFasteners" placeholder="85000"></div>
+  <div class="fg"><label class="fl">Civil / Foundation (Rs)</label><input type="number" id="npBoqCivil" placeholder="0"></div>
+  <div class="fg"><label class="fl">Erection (Rs)</label><input type="number" id="npBoqErection" placeholder="350000"></div>
+  <span class="sec-lbl" style="margin-top:8px">Payment</span>
+  <div class="fg"><label class="fl">Advance Amount (Rs)</label><input type="number" id="npAdvance" placeholder="600000"></div>
+  <div class="fg"><label class="fl">Payment Due Date</label><input type="date" id="npDueDate"></div>
+  <div class="fg"><label class="fl">Notes</label><textarea id="npNotes" placeholder="Koi extra details..."></textarea></div>
+  <button class="submit-btn" id="npSaveBtn">&#10003; Project Save Karo</button>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="s-home">
+  <div class="chip">
+    <div class="chip-av" id="chipAv"></div>
+    <div><div class="chip-name" id="chipName"></div><div class="chip-role" id="chipRole"></div></div>
+    <button class="change-btn" id="changeBtn">Badlo</button>
+  </div>
+  <div class="net-bar"><span class="net-pill" id="netPill"><span class="dot"></span>&nbsp;Online</span></div>
+  <span class="sec-lbl">Kya upload karna hai?</span>
+  <div class="ugrid" id="ugrid">
+    <div class="ubtn u-site" id="hb-site" data-form="site"><span class="ico">&#127959;</span><span class="lbl">Site Photo</span><span class="sub">Erection progress</span></div>
+    <div class="ubtn u-fab" id="hb-fab" data-form="fab"><span class="ico">&#128299;</span><span class="lbl">Fabrication</span><span class="sub">Factory progress</span></div>
+    <div class="ubtn u-draw" id="hb-draw" data-form="draw"><span class="ico">&#128208;</span><span class="lbl">Drawing</span><span class="sub">GA / PDF upload</span></div>
+    <div class="ubtn u-accts" id="hb-accts" data-form="accts"><span class="ico">&#128176;</span><span class="lbl">Accounts</span><span class="sub">Invoice / bill</span></div>
+    <div class="ubtn u-dispatch full" id="hb-dispatch" data-form="dispatch"><span class="ico">&#128666;</span><span class="lbl">Dispatch</span><span class="sub">Material dispatch — tons + photo</span></div>
+  </div>
+  <div class="proj-files" id="projFilesSection">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span class="sec-lbl" style="margin-bottom:0">Project Files</span>
+      <span style="font-size:11px;color:#aaa">tap to open</span>
+    </div>
+    <div id="projFilesList"><div style="text-align:center;padding:16px;color:#aaa;font-size:13px">Loading...</div></div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="screen" id="s-form">
+  <div class="fhdr"><button class="fbk" id="backBtn">&#8592;</button><span id="fIco" style="font-size:22px"></span><span class="ftitle" id="fTitle"></span></div>
+  <div class="err-box" id="errBox"></div>
+  <div class="upby">&#128228; Upload by: <b id="upbyName"></b></div>
+  <div class="gps-box" id="gpsBox">&#128205; Location detect ho rahi hai...</div>
+  <div class="fg"><label class="fl">Project <span class="req">*</span></label><select id="projSel"><option value="">-- Loading --</option></select></div>
+  <div class="fg"><label class="fl" id="subLabel">Type <span class="req">*</span></label><select id="subSel"><option value="">-- Select karo --</option></select></div>
+  <div class="fg" id="progGrp" style="display:none"><label class="fl">Aaj kya kaam hua? <span class="req">*</span></label><input type="text" id="progInp" placeholder="Jaise: 2 columns khade kiye"></div>
+  <div class="fg" id="tonsGrp" style="display:none"><label class="fl">Kitne tons? <span class="req">*</span></label><input type="number" id="tonsInp" placeholder="12.5" step="0.5" min="0"></div>
+  <div class="fg">
+    <label class="fl">Photos / Files (Max 10)</label>
+    <div class="uarea" id="uarea">
+      <div class="urow">
+        <div class="ufbtn cam" id="camBtn"><span class="uico">&#128247;</span><span class="utxt">Camera</span></div>
+        <div class="ufbtn gal" id="galBtn"><span class="uico">&#128193;</span><span class="utxt">Gallery</span></div>
+      </div>
+      <div class="uhint">Max 10 files</div>
+      <div class="uctr" id="uctr" style="display:none"></div>
+      <input type="file" id="camInp" accept="image/*" capture="environment">
+      <input type="file" id="galInp" accept="image/*,application/pdf" multiple>
+      <div class="pgrid2" id="pgrid2"></div>
+    </div>
+  </div>
+  <div class="fg"><label class="fl">Note</label><textarea id="noteInp" placeholder="Koi details..."></textarea></div>
+  <div class="fg"><label class="fl">Koi problem?</label>
+    <select id="probSel">
+      <option value="Sab theek hai">Sab theek hai</option>
+      <option value="Crane issue">Crane / equipment issue</option>
+      <option value="Material nahi aaya">Material nahi aaya</option>
+      <option value="Labour kam hai">Labour kam hai</option>
+      <option value="Client approval chahiye">Client approval chahiye</option>
+      <option value="Drawing issue">Drawing issue</option>
+      <option value="Weather problem">Weather problem</option>
+      <option value="Payment pending">Payment pending</option>
+    </select>
+  </div>
+  <button class="submit-btn" id="submitBtn">&#10003; Submit karo</button>
+</div>
+
+<!-- SUCCESS -->
+<div class="screen" id="s-success">
+  <div class="succ"><div class="si">&#10003;</div><h2>Ho gaya!</h2><p>Firebase mein save hua. Telegram alert gaya.</p><div class="sdet" id="sdet"></div><button class="home-btn" id="homeBtn">&#8962; Wapas Home</button></div>
+</div>
+
+<!-- MD PIN -->
+<div class="screen" id="s-mdpin">
+  <div class="pin-box">
+    <div class="pin-title">&#128274; MD Dashboard</div><div class="pin-sub">MD PIN daalo</div>
+    <div class="pin-disp" id="mdisp">&#8212;&#8212;&#8212;&#8212;</div>
+    <div class="pgrid">
+      <div class="pbtn" data-mp="1">1</div><div class="pbtn" data-mp="2">2</div><div class="pbtn" data-mp="3">3</div>
+      <div class="pbtn" data-mp="4">4</div><div class="pbtn" data-mp="5">5</div><div class="pbtn" data-mp="6">6</div>
+      <div class="pbtn" data-mp="7">7</div><div class="pbtn" data-mp="8">8</div><div class="pbtn" data-mp="9">9</div>
+      <div class="pbtn p-del" id="mpDel">&#9003;</div><div class="pbtn" data-mp="0">0</div><div class="pbtn p-ok" id="mpOk">&#10003;</div>
+    </div>
+    <div class="pin-err" id="mderr"></div>
+  </div>
+  <button class="back-lnk" id="mdBack">&#8592; Wapas Home</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="s-dash">
+  <div class="db-hdr">
+    <div class="db-title">&#128202; MD Dashboard</div>
+    <div style="display:flex;gap:8px">
+      <button class="edit-btn" id="addProjBtn">+ Project</button>
+      <button class="edit-btn" id="dashRefBtn">&#8635;</button>
+    </div>
+  </div>
+  <div class="db-time" id="dashTime"></div>
+  <div class="db-tabs">
+    <div class="tab on" data-tab="projects">Projects</div>
+    <div class="tab" data-tab="payments">Payments</div>
+    <div class="tab" data-tab="activity">Activity</div>
+  </div>
+  <div class="tab-pane on" id="tp-projects"></div>
+  <div class="tab-pane" id="tp-payments"></div>
+  <div class="tab-pane" id="tp-activity"></div>
+  <button class="back-lnk" id="dashBack" style="margin-top:12px">&#8592; Wapas Home</button>
+</div>
+
+<!-- EDIT PROJECT MODAL -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title" id="editTitle">Project Update</div><button class="modal-close" id="editClose">&#10005;</button></div>
+    <div class="err-box" id="editErr"></div>
+    <input type="hidden" id="editPid">
+    <div class="fg"><label class="fl">Stage</label>
+      <select id="editStage"><option value="Design">Design</option><option value="Fabrication">Fabrication</option><option value="Dispatch">Dispatch</option><option value="Erection">Erection</option><option value="Handover">Handover</option></select>
+    </div>
+    <div class="fg"><label class="fl">Progress %</label><input type="number" id="editPct" min="0" max="100" placeholder="45"></div>
+    <div class="fg"><label class="fl">Remarks</label><textarea id="editRemarks" placeholder="Aaj kya hua..."></textarea></div>
+    <div class="fg"><label class="fl">Engineer (change karna ho toh)</label>
+      <select id="editEngineer"><option value="">-- Change nahi --</option><option>Aniket Sharma</option><option>Arpit Kushwaha</option><option>Ankush Kumar</option><option>Nitish</option><option>Sachin</option></select>
+    </div>
+    <div class="fg"><label class="fl">Target Date</label><input type="date" id="editTarget"></div>
+    <div class="fg"><label class="fl">Payment Received (Rs) — 0 if none</label><input type="number" id="editPayment" placeholder="0" value="0"></div>
+    <button class="modal-btn" id="editSaveBtn">&#10003; Update Karo</button>
+    <button class="modal-btn grey" id="editCancelBtn">Cancel</button>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────
+var FB_CFG = {
+  apiKey:"AIzaSyAs_kYB_9SE5Jz3fsDOJQjsrIbhn3Hx0ZI",
+  authDomain:"adityagroup9294.firebaseapp.com",
+  projectId:"adityagroup9294",
+  storageBucket:"adityagroup9294.firebasestorage.app",
+  messagingSenderId:"200350354834",
+  appId:"1:200350354834:web:b24eac4477a5b2f2a0454b"
+};
+firebase.initializeApp(FB_CFG);
+var db  = firebase.firestore();
+var st  = firebase.storage();
+var auth= firebase.auth();
+
+var TG_TOKEN = "8701273110:AAHMD6FTgxxIQispTOmf12SURjzjj-w2Chg";
+var TG_MD    = "-1003802051877";
+var TG_ENG   = "-5160792976";
+var TG_ACC   = "-5169531874";
+var TG_SITE  = "-5102907619";
+var MD_PIN   = "2580";
+var NP_PIN   = "7890";
+var VER      = "fb1";
+
+var LOGO_B64 = "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";
+
+var TEAM = [
+  {name:"Aniket Sharma",  role:"Engineer Head",    ini:"AS", pin:"1001", forms:["site","fab","draw","dispatch"],         dash:true},
+  {name:"Sarvesh",        role:"Manager",           ini:"SV", pin:"1013", forms:["site","fab","draw","accts","dispatch"], dash:true},
+  {name:"Arpit Kushwaha", role:"Site Head",         ini:"AK", pin:"1002", forms:["site","fab","dispatch"],               dash:false},
+  {name:"Nitish",         role:"Site Engineer",     ini:"NT", pin:"1003", forms:["site","dispatch"],                     dash:false},
+  {name:"Vikas",          role:"Site Engineer",     ini:"VK", pin:"1004", forms:["site","dispatch"],                     dash:false},
+  {name:"Manish Pandey",  role:"Site Engineer",     ini:"MP", pin:"1005", forms:["site","dispatch"],                     dash:false},
+  {name:"Sachin",         role:"Floor Head",        ini:"SC", pin:"1006", forms:["fab","draw","dispatch"],               dash:false},
+  {name:"Shivam",         role:"Store Keeper",      ini:"SH", pin:"1007", forms:["fab","dispatch"],                      dash:false},
+  {name:"Ankush Kumar",   role:"Design Engineer",   ini:"AK", pin:"1008", forms:["site","fab","draw"],                   dash:false},
+  {name:"Niharika",       role:"Accountant",        ini:"NH", pin:"1009", forms:["accts","dispatch"],                    dash:false},
+  {name:"Ashutosh Verma", role:"Accountant",        ini:"AV", pin:"1010", forms:["accts","dispatch"],                    dash:false},
+  {name:"Rohini Mishra",  role:"Admin Operations",  ini:"RM", pin:"1011", forms:["site","fab","dispatch"],               dash:false},
+  {name:"Sarita Verma",   role:"Admin & Sales",     ini:"SV", pin:"1012", forms:["site","fab","dispatch"],               dash:false}
+];
+
+var FORMS = {
+  site:    {ico:"&#127959;",ttl:"Site Photo",     sub:["Column erection","Rafter fitting","Purlin/girt","Roofing sheet","Cladding/wall","Gutter/downpipe","Final touches"],    tons:false,prog:true, folder:"site"},
+  fab:     {ico:"&#128299;",ttl:"Fabrication",    sub:["Cutting/marking","Welding","Primary members ready","Secondary members","Painting/primer","QC inspection","FAT complete"],tons:true, prog:false,folder:"fabrication"},
+  draw:    {ico:"&#128208;",ttl:"Drawing Upload", sub:["GA Drawing","Structural Drawing","Foundation Drawing","Fabrication Drawing","BOQ Finalised","Client Approval"],         tons:false,prog:false,folder:"drawings"},
+  accts:   {ico:"&#128176;",ttl:"Accounts",       sub:["Invoice/Bill","E-Way Bill","Payment receipt","Purchase order","Insurance","Tax certificate"],                            tons:false,prog:false,folder:"accounts"},
+  dispatch:{ico:"&#128666;",ttl:"Dispatch",       sub:["Loading photo","Challan/delivery note","Partial dispatch","Full dispatch"],                                              tons:true, prog:false,folder:"dispatch"}
+};
+
+// STATE
+var CU=null, CF=null, FILES=[], GPS={lat:null,lng:null,acc:null};
+var LPIN="", LWARN=0, MPIN="", NPPIN="", PENDING=null, PROJECTS=[];
+
+// ── INIT ─────────────────────────────────────────────
+window.onload = function(){
+  // Logo
+  var lgSrc = "data:image/png;base64,"+LOGO_B64;
+  var hl=document.getElementById("hdrLogo"); if(hl) hl.src=lgSrc;
+  var he=document.getElementById("heroLogo"); if(he) he.src=lgSrc;
+
+  // Header date
+  var n=new Date(), hda=document.getElementById("hda");
+  if(hda) hda.textContent=n.toLocaleDateString("en-IN",{day:"numeric",month:"short"})+" | "+n.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+
+  setNet();
+  window.addEventListener("online",setNet);
+  window.addEventListener("offline",setNet);
+
+  // Build name list
+  buildNameList();
+
+  // Event delegation
+  document.addEventListener("click", handleClick);
+
+  // File inputs
+  var ci=document.getElementById("camInp"), gi=document.getElementById("galInp");
+  if(ci) ci.addEventListener("change",function(){addFiles(this.files);});
+  if(gi) gi.addEventListener("change",function(){addFiles(this.files);});
+
+  // Enable Firestore offline persistence
+  db.enablePersistence({synchronizeTabs:true}).catch(function(err){
+    console.log("Persistence error:", err.code);
+  });
+
+  // Session restore - no auth needed
+  try{
+    var sv=localStorage.getItem("peb_ver_fb");
+    var su=localStorage.getItem("peb_user_fb");
+    if(sv===VER&&su){
+      var p=JSON.parse(su);
+      if(p&&p.name&&p.forms){
+        CU=p; setHeader(); applyForms(); goTo("s-home"); loadProjects(); return;
+      }
+    }
+  }catch(e){}
+  localStorage.removeItem("peb_user_fb");
+  localStorage.setItem("peb_ver_fb",VER);
+  goTo("s-name");
+};
+
+function buildNameList(){
+  var nl=document.getElementById("nlist"); if(!nl) return;
+  nl.innerHTML="";
+  TEAM.forEach(function(m,i){
+    var d=document.createElement("div");
+    d.className="nrow"; d.setAttribute("data-i",String(i));
+    d.innerHTML="<div class='nav'>"+m.ini+"</div><div><div class='nname'>"+m.name+"</div><div class='nrole'>"+m.role+"</div></div><div class='ntick'>&#10003;</div>";
+    nl.appendChild(d);
+  });
+}
+
+// ── SCREENS ──────────────────────────────────────────
+function goTo(id){
+  var all=document.querySelectorAll(".screen");
+  for(var i=0;i<all.length;i++) all[i].className="screen";
+  var el=document.getElementById(id); if(el){el.className="screen active";window.scrollTo(0,0);}
+}
+function applyForms(){
+  if(!CU) return;
+  ["site","fab","draw","accts","dispatch"].forEach(function(t){
+    var el=document.getElementById("hb-"+t);
+    if(el) el.style.cssText=(CU.forms.indexOf(t)>-1)?"display:block":"display:none";
+  });
+  var db=document.getElementById("dashBtn");
+  if(db) db.style.cssText=CU.dash?"display:flex":"display:none";
+}
+function setNet(){
+  var p=document.getElementById("netPill"); if(!p) return;
+  if(navigator.onLine){p.className="net-pill";p.innerHTML="<span class='dot'></span>&nbsp;Online";}
+  else{p.className="net-pill off";p.innerHTML="<span class='dot'></span>&nbsp;Offline";}
+}
+function setHeader(){
+  if(!CU) return;
+  var hu=document.getElementById("huser"),ca=document.getElementById("chipAv"),cn=document.getElementById("chipName"),cr=document.getElementById("chipRole");
+  if(hu)hu.textContent=CU.name; if(ca)ca.textContent=CU.ini; if(cn)cn.textContent=CU.name; if(cr)cr.textContent=CU.role;
+}
+
+// ── CLICK HANDLER ────────────────────────────────────
+function handleClick(e){
+  var t=e.target;
+  var nr=t.closest?t.closest(".nrow"):null;
+  if(nr){ selectName(nr); return; }
+  var id=t.id||(t.parentElement&&t.parentElement.id?t.parentElement.id:"");
+  var lp=t.closest?t.closest("[data-lp]"):null; if(lp){lPress(lp.getAttribute("data-lp"));return;}
+  if(id==="lpDel"){LPIN=LPIN.slice(0,-1);updLDisp();return;}
+  if(id==="lpOk"){lCheck();return;}
+  if(id==="loginBack"){LPIN="";goTo("s-name");return;}
+  if(id==="newProjTile"||t.closest("#newProjTile")){NPPIN="";updNPDisp();var ne=document.getElementById("nperr");if(ne)ne.textContent="";goTo("s-newproj-pin");return;}
+  var np=t.closest?t.closest("[data-np]"):null; if(np){npPress(np.getAttribute("data-np"));return;}
+  if(id==="npDel"){NPPIN=NPPIN.slice(0,-1);updNPDisp();return;}
+  if(id==="npOk"){npCheck();return;}
+  if(id==="npBack"){NPPIN="";goTo("s-name");return;}
+  if(id==="npFormBack"){goTo("s-name");return;}
+  if(id==="npSaveBtn"){saveNewProject();return;}
+  var ub=t.closest?t.closest("[data-form]"):null; if(ub){openForm(ub.getAttribute("data-form"));return;}
+  if(id==="changeBtn"){doLogout();return;}
+  if(id==="dashBtn"||t.closest("#dashBtn")){MPIN="";updMDisp();goTo("s-mdpin");return;}
+  if(id==="backBtn"){resetForm();goTo("s-home");return;}
+  if(id==="camBtn"||t.closest("#camBtn")){if(FILES.length<10){var c=document.getElementById("camInp");c.value="";c.click();}return;}
+  if(id==="galBtn"||t.closest("#galBtn")){if(FILES.length<10){var g=document.getElementById("galInp");g.value="";g.click();}return;}
+  if(id==="submitBtn"){doSubmit();return;}
+  if(id==="homeBtn"){resetForm();goTo("s-home");return;}
+  var mp=t.closest?t.closest("[data-mp]"):null; if(mp){mPress(mp.getAttribute("data-mp"));return;}
+  if(id==="mpDel"){MPIN=MPIN.slice(0,-1);updMDisp();return;}
+  if(id==="mpOk"){mCheck();return;}
+  if(id==="mdBack"){MPIN="";goTo("s-home");return;}
+  if(id==="dashRefBtn"){loadDash();return;}
+  if(id==="dashBack"){goTo("s-home");return;}
+  if(id==="addProjBtn"){clearNPForm();goTo("s-newproj");return;}
+  var tb=t.closest?t.closest(".tab"):null; if(tb&&tb.getAttribute("data-tab")){switchTab(tb.getAttribute("data-tab"));return;}
+  if(id==="editClose"||id==="editCancelBtn"){closeEditModal();return;}
+  if(id==="editSaveBtn"){saveEditProject();return;}
+  var eb=t.closest?t.closest("[data-edit]"):null; if(eb){openEditModal(eb.getAttribute("data-edit"));return;}
+  var dr=t.closest?t.closest("[data-drive]"):null; if(dr){window.open(dr.getAttribute("data-drive"),"_blank");return;}
+  var rm=t.closest?t.closest(".prm"):null; if(rm){FILES.splice(parseInt(rm.getAttribute("data-i"),10),1);renderFiles();return;}
+}
+
+// ── NAME SELECT ──────────────────────────────────────
+function selectName(nr){
+  document.querySelectorAll(".nrow").forEach(function(r){r.className="nrow";});
+  nr.className="nrow sel";
+  var idx=parseInt(nr.getAttribute("data-i"),10); PENDING=TEAM[idx];
+  LPIN=""; LWARN=0;
+  var lt=document.getElementById("ltitle"); if(lt) lt.textContent=PENDING.name;
+  updLDisp();
+  var le=document.getElementById("lerr"); if(le) le.textContent="";
+  var lw=document.getElementById("lwarn"); if(lw) lw.textContent="";
+  goTo("s-login");
+}
+
+// ── LOGIN PIN ────────────────────────────────────────
+function lPress(n){if(LPIN.length<4){LPIN+=n;updLDisp();if(LPIN.length===4)setTimeout(lCheck,200);}}
+function updLDisp(){var d=document.getElementById("ldisp");if(!d)return;var s="";for(var i=0;i<4;i++)s+=(i<LPIN.length?"●":"—");d.textContent=s;d.className="pin-disp"+(LPIN.length>0?" has":"");}
+function lCheck(){
+  if(!PENDING)return;
+  if(LPIN===PENDING.pin){
+    CU=PENDING;PENDING=null;LPIN="";LWARN=0;
+    localStorage.setItem("peb_ver_fb",VER);
+    localStorage.setItem("peb_user_fb",JSON.stringify(CU));
+    setHeader();applyForms();goTo("s-home");loadProjects();
+  } else {
+    LWARN++;LPIN="";updLDisp();
+    var le=document.getElementById("lerr");if(le)le.textContent="Galat PIN";
+    var lw=document.getElementById("lwarn");if(lw)lw.textContent=(LWARN>=3?"Puneet bhai ko batao! ":"")+LWARN+" baar galat";
+  }
+}
+function doLogout(){CU=null;PENDING=null;localStorage.removeItem("peb_user_fb");document.querySelectorAll(".nrow").forEach(function(r){r.className="nrow";});goTo("s-name");}
+
+// ── NP PIN ───────────────────────────────────────────
+function npPress(n){if(NPPIN.length<4){NPPIN+=n;updNPDisp();if(NPPIN.length===4)setTimeout(npCheck,200);}}
+function updNPDisp(){var d=document.getElementById("npdisp");if(!d)return;var s="";for(var i=0;i<4;i++)s+=(i<NPPIN.length?"●":"—");d.textContent=s;d.className="pin-disp"+(NPPIN.length>0?" has":"");}
+function npCheck(){var ne=document.getElementById("nperr");if(NPPIN===NP_PIN){NPPIN="";clearNPForm();goTo("s-newproj");}else{NPPIN="";updNPDisp();if(ne)ne.textContent="Galat PIN";}}
+function clearNPForm(){["npClient","npProjName","npScope","npPhone","npTarget","npValue","npTonnage","npAdvance","npDueDate","npNotes","npBoqPrimary","npBoqSecondary","npBoqRoofing","npBoqCladding","npBoqFasteners","npBoqCivil","npBoqErection"].forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});var ne=document.getElementById("npEngineer");if(ne)ne.value="";var er=document.getElementById("npErr");if(er)er.className="err-box";}
+
+// ── MD PIN ───────────────────────────────────────────
+function mPress(n){if(MPIN.length<4){MPIN+=n;updMDisp();if(MPIN.length===4)setTimeout(mCheck,200);}}
+function updMDisp(){var d=document.getElementById("mdisp");if(!d)return;var s="";for(var i=0;i<4;i++)s+=(i<MPIN.length?"●":"—");d.textContent=s;d.className="pin-disp"+(MPIN.length>0?" has":"");}
+function mCheck(){var me=document.getElementById("mderr");if(MPIN===MD_PIN){if(me)me.textContent="";MPIN="";goTo("s-dash");loadDash();}else{MPIN="";updMDisp();if(me)me.textContent="Galat PIN";}}
+
+// ── LOAD PROJECTS ────────────────────────────────────
+function loadProjects(){
+  db.collection("projects").orderBy("createdAt","desc").get()
+  .then(function(snap){
+    PROJECTS=[];
+    var s=document.getElementById("projSel");
+    if(s) s.innerHTML="<option value=''>-- Project chuniye --</option>";
+    var fh="";
+    snap.forEach(function(doc){
+      var d=doc.data(); d.id=doc.id; PROJECTS.push(d);
+      if(s){var o=document.createElement("option");o.value=doc.id;o.textContent=d.pid+" — "+d.client;s.appendChild(o);}
+      var pct=Math.round((parseFloat(d.pct||0))*100);
+      var hasFiles=d.storageFolder&&d.storageFolder.length>5;
+      fh+="<div class='pfile-card'>";
+      fh+="<div class='pfile-info'><div class='pfile-pid'>"+d.pid+"</div><div class='pfile-client'>"+d.client+"</div>";
+      fh+="<div class='pfile-stage'>"+d.stage+" &bull; "+pct+"%</div>";
+      fh+="<div class='pbar-mini'><div class='pbar-mini-fill' style='width:"+pct+"%'></div></div></div>";
+      if(hasFiles){
+        fh+="<button class='file-btn' data-drive='"+d.storageFolder+"'>Files</button>";
+      } else {
+        fh+="<button class='file-btn disabled'>No Files</button>";
+      }
+      fh+="</div>";
+    });
+    if(!fh) fh="<div style='text-align:center;padding:16px;color:#aaa;font-size:13px'>Koi project nahi</div>";
+    var fl=document.getElementById("projFilesList"); if(fl) fl.innerHTML=fh;
+  })
+  .catch(function(e){console.log("loadProjects error:",e);});
+}
+
+// ── SAVE NEW PROJECT ─────────────────────────────────
+function saveNewProject(){
+  var client=document.getElementById("npClient").value.trim();
+  var pname=document.getElementById("npProjName").value.trim();
+  var scope=document.getElementById("npScope").value.trim();
+  var value=document.getElementById("npValue").value;
+  var tonnage=document.getElementById("npTonnage").value;
+  var er=document.getElementById("npErr");
+  if(!client||!pname||!scope||!value||!tonnage){if(er){er.textContent="Starred (*) fields fill karo!";er.className="err-box show";}return;}
+  var btn=document.getElementById("npSaveBtn");if(btn)btn.disabled=true;
+  showLoader("Project save ho raha hai...",30);
+
+  // Generate PID from timestamp - no counter needed
+  var ts=Date.now();
+  var pid="PEB-"+String(ts).slice(-4);
+  Promise.resolve(pid).then(function(pid){
+    var now=firebase.firestore.FieldValue.serverTimestamp();
+    var projData={
+      pid:pid, client:client, projectName:pname, scope:scope,
+      phone:document.getElementById("npPhone").value||"",
+      engineer:document.getElementById("npEngineer").value||"",
+      targetDate:document.getElementById("npTarget").value||"",
+      value:parseFloat(value), tonnage:parseFloat(tonnage),
+      stage:"Design", pct:0, status:"On Track", delay:0,
+      remarks:"", storageFolder:"projects/"+pid,
+      boq:{primary:parseFloat(document.getElementById("npBoqPrimary").value||0),secondary:parseFloat(document.getElementById("npBoqSecondary").value||0),roofing:parseFloat(document.getElementById("npBoqRoofing").value||0),cladding:parseFloat(document.getElementById("npBoqCladding").value||0),fasteners:parseFloat(document.getElementById("npBoqFasteners").value||0),civil:parseFloat(document.getElementById("npBoqCivil").value||0),erection:parseFloat(document.getElementById("npBoqErection").value||0)},
+      payment:{contract:parseFloat(value),advance:parseFloat(document.getElementById("npAdvance").value||0),received:0,balance:parseFloat(value),status:"Pending",dueDate:document.getElementById("npDueDate").value||""},
+      notes:document.getElementById("npNotes").value||"",
+      addedBy:CU?CU.name:"Direct",
+      createdAt:now, updatedAt:now, lastUploader:""
+    };
+    return db.collection("projects").doc(pid).set(projData).then(function(){return pid;});
+  }).then(function(pid){
+    hideLoader(); if(btn)btn.disabled=false;
+    tgSend(TG_MD,"NEW PROJECT\nPID: "+pid+"\nClient: "+client+"\nScope: "+scope+"\nValue: Rs "+(parseFloat(value)/100000).toFixed(1)+"L\nTonnage: "+tonnage+"T\nBy: "+(CU?CU.name:""));
+    tgSend(TG_ENG,"NEW PROJECT\nPID: "+pid+"\n"+client+" — "+scope);
+    var sd=document.getElementById("sdet");
+    if(sd)sd.innerHTML="<b>PID:</b> "+pid+"<br><b>Client:</b> "+client+"<br><b>Scope:</b> "+scope+"<br><b>Value:</b> Rs "+(parseFloat(value)/100000).toFixed(1)+"L<br><b>Tonnage:</b> "+tonnage+"T<br><b>Firebase:</b> Saved";
+    loadProjects(); goTo("s-success");
+  }).catch(function(e){hideLoader();if(btn)btn.disabled=false;if(er){er.textContent="Error: "+e.message;er.className="err-box show";}});
+}
+
+// ── OPEN FORM ────────────────────────────────────────
+function openForm(type){
+  if(!CU||CU.forms.indexOf(type)===-1)return;
+  CF=type; var c=FORMS[type];
+  var fi=document.getElementById("fIco");if(fi)fi.innerHTML=c.ico;
+  var ft=document.getElementById("fTitle");if(ft)ft.textContent=c.ttl;
+  var un=document.getElementById("upbyName");if(un)un.textContent=CU.name;
+  var eb=document.getElementById("errBox");if(eb)eb.className="err-box";
+  var ss=document.getElementById("subSel");
+  if(ss){ss.innerHTML="<option value=''>-- Select karo --</option>";c.sub.forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;ss.appendChild(o);});}
+  document.getElementById("tonsGrp").style.display=c.tons?"block":"none";
+  document.getElementById("progGrp").style.display=c.prog?"block":"none";
+  GPS={lat:null,lng:null,acc:null}; getGPS(); goTo("s-form");
+}
+
+function getGPS(){
+  var box=document.getElementById("gpsBox");if(!box)return;
+  box.className="gps-box";box.textContent="Location detect ho rahi hai...";
+  if(!navigator.geolocation){box.className="gps-box fail";box.textContent="GPS nahi hai";return;}
+  navigator.geolocation.getCurrentPosition(
+    function(p){GPS.lat=p.coords.latitude.toFixed(6);GPS.lng=p.coords.longitude.toFixed(6);GPS.acc=Math.round(p.coords.accuracy);box.className="gps-box ok";box.textContent="GPS: "+GPS.lat+", "+GPS.lng+" ("+GPS.acc+"m)";},
+    function(e){box.className="gps-box fail";box.textContent=e.code===1?"Location permission do":"GPS nahi mila";},
+    {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+  );
+}
+
+// ── FILE HANDLING ────────────────────────────────────
+function addFiles(flist){if(!flist)return;var rem=10-FILES.length,n=Math.min(flist.length,rem);for(var i=0;i<n;i++)processFile(flist[i]);}
+function processFile(f){
+  if(f.type.indexOf("image/")===0){
+    var r=new FileReader();r.onload=function(ev){var img=new Image();img.onload=function(){var c=document.createElement("canvas"),ctx=c.getContext("2d"),M=800,w=img.width,h=img.height;if(w>h){if(w>M){h=Math.round(h*M/w);w=M;}}else{if(h>M){w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;ctx.drawImage(img,0,0,w,h);var b64=c.toDataURL("image/jpeg",0.65);FILES.push({blob:dataURLtoBlob(b64),name:f.name,src:b64,isImg:true,mime:"image/jpeg"});renderFiles();};img.src=ev.target.result;};r.readAsDataURL(f);
+  } else {
+    FILES.push({blob:f,name:f.name,isImg:false,mime:f.type||"application/octet-stream"});renderFiles();
+  }
+}
+function dataURLtoBlob(dataurl){var arr=dataurl.split(","),mime=arr[0].match(/:(.*?);/)[1],bstr=atob(arr[1]),n=bstr.length,u8=new Uint8Array(n);while(n--){u8[n]=bstr.charCodeAt(n);}return new Blob([u8],{type:mime});}
+function renderFiles(){
+  var g=document.getElementById("pgrid2"),ct=document.getElementById("uctr"),ua=document.getElementById("uarea");if(!g)return;
+  g.innerHTML="";
+  if(FILES.length===0){if(ua)ua.className="uarea";if(ct)ct.style.display="none";return;}
+  if(ua)ua.className="uarea has";if(ct){ct.style.display="block";ct.textContent=FILES.length+"/10 files";}
+  FILES.forEach(function(f,i){var d=document.createElement("div");d.className="pitem";if(f.isImg)d.innerHTML="<img src='"+f.src+"'><button class='prm' data-i='"+i+"'>x</button>";else d.innerHTML="<div class='pdoc'><span>&#128196;</span>"+f.name.substr(0,10)+"</div><button class='prm' data-i='"+i+"'>x</button>";g.appendChild(d);});
+}
+
+// ── SUBMIT ───────────────────────────────────────────
+function doSubmit(){
+  var pid=document.getElementById("projSel").value;
+  var sub=document.getElementById("subSel").value;
+  var tons=document.getElementById("tonsInp").value;
+  var prog=document.getElementById("progInp").value;
+  var note=document.getElementById("noteInp").value;
+  var prob=document.getElementById("probSel").value;
+  if(!pid){showErr("Project select karo!");return;}
+  if(!sub){showErr("Type select karo!");return;}
+  if(FORMS[CF].tons&&!tons){showErr("Tons daalo!");return;}
+  if(FORMS[CF].prog&&!prog){showErr("Progress batao!");return;}
+
+  var proj=null; PROJECTS.forEach(function(p){if(p.id===pid)proj=p;});
+  var fnote=prog?"Progress: "+prog+(note?" | "+note:""):note;
+  var sb=document.getElementById("submitBtn");if(sb)sb.disabled=true;
+
+  showLoader("Submit ho raha hai...",10);
+
+  // Upload files to Firebase Storage
+  if(FILES.length===0){
+    saveUpdate(pid,proj,sub,tons,fnote,prob,0,[]).then(function(){
+      if(sb)sb.disabled=false;hideLoader();showSuccess(pid,proj,sub,tons,prog,prob,0);
+    }).catch(function(e){if(sb)sb.disabled=false;hideLoader();showErr("Error: "+e.message);});
+  } else {
+    uploadAllFiles(pid,sub).then(function(urls){
+      return saveUpdate(pid,proj,sub,tons,fnote,prob,urls.length,urls);
+    }).then(function(){
+      if(sb)sb.disabled=false;hideLoader();
+      var proj2=null;PROJECTS.forEach(function(p){if(p.id===pid)proj2=p;});
+      showSuccess(pid,proj2,sub,tons,prog,prob,FILES.length);
+    }).catch(function(e){if(sb)sb.disabled=false;hideLoader();showErr("Error: "+e.message);});
+  }
+}
+
+function uploadAllFiles(pid,sub){
+  var promises=FILES.map(function(f,i){
+    var path="projects/"+pid+"/"+CF+"/"+Date.now()+"_"+i+"_"+f.name;
+    var ref=st.ref(path);
+    setP(Math.round((i/FILES.length)*70)+10);
+    return ref.put(f.blob).then(function(){return ref.getDownloadURL();});
+  });
+  return Promise.all(promises);
+}
+
+function saveUpdate(pid,proj,sub,tons,note,prob,fileCount,urls){
+  var now=firebase.firestore.FieldValue.serverTimestamp();
+  var stageMap={site:"Erection",fab:"Fabrication",draw:"Design",accts:"Fabrication",dispatch:"Dispatch"};
+  var updateData={
+    stage:stageMap[CF]||proj.stage,
+    updatedAt:now, lastUploader:CU.name,
+    remarks:note||"",
+  };
+  if(parseFloat(tons)>0&&proj.tonnage>0){
+    var newDisp=(proj.dispatchedTons||0)+parseFloat(tons);
+    updateData.dispatchedTons=newDisp;
+    updateData.pct=Math.min(newDisp/proj.tonnage,1);
+  }
+  if(GPS.lat) updateData.lastGPS=GPS.lat+","+GPS.lng;
+  if(urls&&urls.length) updateData.lastFileUrl=urls[0];
+
+  // Add upload record to subcollection
+  var uploadRecord={
+    type:CF, subType:sub, uploadedBy:CU.name, uploadedRole:CU.role,
+    tons:parseFloat(tons)||0, note:note||"", problem:prob,
+    gps:GPS.lat?(GPS.lat+","+GPS.lng):"", fileUrls:urls||[],
+    fileCount:fileCount, timestamp:now
+  };
+
+  var batch=db.batch();
+  batch.update(db.collection("projects").doc(pid), updateData);
+  batch.set(db.collection("projects").doc(pid).collection("uploads").doc(), uploadRecord);
+  
+  return batch.commit().then(function(){
+    // Telegram
+    var msg=CF.toUpperCase()+" UPDATE\n"+pid+" — "+(proj?proj.client:"")+"\nBy: "+CU.name+" ("+CU.role+")\nUpdate: "+sub+(parseFloat(tons)>0?"\nTons: "+tons:"")+(note?"\nNote: "+note:"")+"\nProblem: "+prob+(GPS.lat?"\nGPS: "+GPS.lat+","+GPS.lng:"");
+    tgSend(TG_MD,msg);
+    if(CF==="site"||CF==="fab") tgSend(TG_ENG,msg);
+    if(CF==="dispatch") tgSend(TG_SITE,"DISPATCH: "+pid+" — "+(proj?proj.client:"")+"\nBy: "+CU.name+(parseFloat(tons)>0?"\nTons: "+tons:""));
+    if(CF==="site"&&prob!=="Sab theek hai") tgSend(TG_ENG,"SITE PROBLEM\n"+pid+"\nIssue: "+prob);
+    if(CF==="dispatch"){tgSend(TG_ACC,"BILLING: "+pid+" — "+(proj?proj.client:"")+"\nDispatch by: "+CU.name);}
+    loadProjects();
+  });
+}
+
+function showSuccess(pid,proj,sub,tons,prog,prob,files){
+  var now=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+  var sd=document.getElementById("sdet");
+  if(sd)sd.innerHTML="<b>By:</b> "+CU.name+"<br><b>Project:</b> "+pid+(proj?" — "+proj.client:"")+"<br><b>Type:</b> "+(FORMS[CF]?FORMS[CF].ttl:"")+"<br><b>Update:</b> "+sub+(tons?"<br><b>Tons:</b> "+tons:"")+(prog?"<br><b>Progress:</b> "+prog:"")+"<br><b>Problem:</b> "+prob+(files?"<br><b>Files:</b> "+files+" uploaded":"")+"<br><b>Time:</b> "+now+"<br><b>Firebase:</b> Saved";
+  resetForm(); goTo("s-success");
+}
+function showErr(msg){var eb=document.getElementById("errBox");if(eb){eb.textContent=msg;eb.className="err-box show";window.scrollTo(0,0);}}
+function resetForm(){CF=null;FILES=[];["projSel","subSel","tonsInp","progInp","noteInp"].forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});var ps=document.getElementById("probSel");if(ps)ps.value="Sab theek hai";var ci=document.getElementById("camInp");if(ci)ci.value="";var gi=document.getElementById("galInp");if(gi)gi.value="";renderFiles();var sb=document.getElementById("submitBtn");if(sb)sb.disabled=false;var eb=document.getElementById("errBox");if(eb)eb.className="err-box";}
+
+// ── LOADER ───────────────────────────────────────────
+function showLoader(txt,p){var l=document.getElementById("loader");if(l)l.className="loader show";var lt=document.getElementById("ltxt");if(lt)lt.textContent=txt||"Please wait...";setP(p||0);}
+function hideLoader(){var l=document.getElementById("loader");if(l)l.className="loader";}
+function setP(p){var f=document.getElementById("pfill");if(f)f.style.width=p+"%";}
+
+// ── TELEGRAM ─────────────────────────────────────────
+function tgSend(chatId,text){
+  fetch("https://api.telegram.org/bot"+TG_TOKEN+"/sendMessage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({chat_id:String(chatId),text:text})}).catch(function(){});
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function loadDash(){
+  var now=new Date(),dt=document.getElementById("dashTime");
+  if(dt)dt.textContent="Updated: "+now.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})+" | "+now.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+  showLoader("Dashboard load ho raha hai...",10);
+  Promise.all([
+    db.collection("projects").orderBy("createdAt","desc").get(),
+    db.collection("uploads").orderBy("timestamp","desc").limit(20).get()
+  ]).then(function(results){
+    hideLoader();
+    var projSnap=results[0];
+    var projs=[]; projSnap.forEach(function(doc){var d=doc.data();d.id=doc.id;projs.push(d);});
+    renderDash(projs);
+  }).catch(function(e){hideLoader();console.log("dash error",e);var tp=document.getElementById("tp-projects");if(tp)tp.innerHTML="<div class='none-msg' style='color:#c00'>Error loading</div>";});
+}
+
+function switchTab(tab){
+  document.querySelectorAll(".tab").forEach(function(t){t.className=t.getAttribute("data-tab")===tab?"tab on":"tab";});
+  document.querySelectorAll(".tab-pane").forEach(function(p){p.className=p.id==="tp-"+tab?"tab-pane on":"tab-pane";});
+}
+
+function renderDash(projs){
+  var onT=0,atR=0,del=0,totVal=0;
+  projs.forEach(function(p){
+    if(p.status==="On Track")onT++;else if(p.status==="At Risk")atR++;else if(p.status==="Delayed")del++;
+    totVal+=parseFloat(p.value||0);
+  });
+
+  var ph="<div class='sum-grid'>";
+  ph+="<div class='sc sc-grn'><div class='sc-val'>"+onT+"</div><div class='sc-lbl'>On Track</div></div>";
+  ph+="<div class='sc sc-amb'><div class='sc-val'>"+atR+"</div><div class='sc-lbl'>At Risk</div></div>";
+  ph+="<div class='sc sc-red'><div class='sc-val'>"+del+"</div><div class='sc-lbl'>Delayed</div></div>";
+  ph+="</div>";
+  ph+="<div style='background:#EEF4FC;border-radius:12px;padding:12px;text-align:center;margin-bottom:16px'><div style='font-size:18px;font-weight:800;color:#185FA5'>Rs "+(totVal/100000).toFixed(1)+"L</div><div style='font-size:10px;font-weight:700;color:#185FA5;text-transform:uppercase;letter-spacing:.5px'>Total Portfolio</div></div>";
+
+  projs.forEach(function(p){
+    var pct=Math.round((parseFloat(p.pct||0))*100);
+    var sc="st-"+(p.stage||"design").toLowerCase().replace(/ /g,"-");
+    var dtag=p.delay>14?"<span class='delay-late'>"+p.delay+"d late</span>":p.delay>0?"<span class='delay-risk'>"+p.delay+"d late</span>":"<span class='delay-ok'>On time</span>";
+    ph+="<div class='pcard'>";
+    ph+="<div class='pcard-top'><div><div class='ppid'>"+p.pid+"</div><div class='pclient'>"+p.client+"</div><div style='font-size:11px;color:#888;margin-top:2px'>"+p.scope+"</div></div><span class='stbadge "+sc+"'>"+p.stage+"</span></div>";
+    ph+="<div class='pbar-row'><div class='pbar-wrap'><div class='pbar-fill' style='width:"+pct+"%'></div></div><div class='ppct'>"+pct+"%</div></div>";
+    ph+="<div class='pmeta'><span><b>"+p.engineer+"</b></span><span><b>"+p.tonnage+"T</b></span><span><b>Rs "+(parseFloat(p.value||0)/100000).toFixed(1)+"L</b></span>"+dtag+"</div>";
+    if(p.remarks) ph+="<div style='font-size:11px;color:#666;background:#F0F2F5;border-radius:8px;padding:7px 10px;margin-bottom:8px'>"+p.remarks+"</div>";
+    ph+="<div class='card-btns'>";
+    ph+="<button class='edit-btn' data-edit='"+p.id+"'>Update</button>";
+    ph+="<button class='edit-btn green' data-drive='"+("https://console.firebase.google.com/project/adityagroup9294/storage/adityagroup9294.firebasestorage.app/files/projects/"+p.pid)+"'>Files</button>";
+    ph+="</div></div>";
+  });
+  if(!projs.length) ph+="<div class='none-msg'>Koi project nahi — + Project se add karo</div>";
+
+  var tp=document.getElementById("tp-projects");if(tp)tp.innerHTML=ph;
+
+  // Payments tab
+  var payH="";
+  var totRec=0,totBal=0;
+  projs.forEach(function(p){if(p.payment){totRec+=parseFloat(p.payment.received||0);totBal+=parseFloat(p.payment.balance||0);}});
+  payH+="<div class='sum-grid' style='grid-template-columns:1fr 1fr;margin-bottom:14px'>";
+  payH+="<div class='sc sc-grn'><div class='sc-val'>Rs "+(totRec/100000).toFixed(1)+"L</div><div class='sc-lbl'>Received</div></div>";
+  payH+="<div class='sc sc-red'><div class='sc-val'>Rs "+(totBal/100000).toFixed(1)+"L</div><div class='sc-lbl'>Outstanding</div></div>";
+  payH+="</div>";
+  projs.forEach(function(p){
+    if(!p.payment) return;
+    var ps="ps-"+(p.payment.status||"pending").toLowerCase().replace(/ /g,"-");
+    payH+="<div class='paycard'><div class='pay-top'><div><div class='ppid'>"+p.pid+"</div><div class='pclient'>"+p.client+"</div></div><span class='pstat "+ps+"'>"+p.payment.status+"</span></div>";
+    payH+="<div class='pay-amts'><span>Contract: <b>Rs "+(parseFloat(p.payment.contract||0)/100000).toFixed(1)+"L</b></span><span>Advance: <b>Rs "+(parseFloat(p.payment.advance||0)/100000).toFixed(1)+"L</b></span><span>Received: <b>Rs "+(parseFloat(p.payment.received||0)/100000).toFixed(1)+"L</b></span><span>Balance: <b>Rs "+(parseFloat(p.payment.balance||0)/100000).toFixed(1)+"L</b></span></div></div>";
+  });
+  var tpay=document.getElementById("tp-payments");if(tpay)tpay.innerHTML=payH||"<div class='none-msg'>Koi payment data nahi</div>";
+
+  // Activity tab — from uploads subcollection
+  var tact=document.getElementById("tp-activity");
+  if(tact){
+    tact.innerHTML="<div style='text-align:center;padding:12px;color:#aaa;font-size:13px'>Load ho raha hai...</div>";
+    // Get recent uploads across all projects
+    var today=new Date(); today.setHours(0,0,0,0);
+    var promises=projs.slice(0,5).map(function(p){
+      return db.collection("projects").doc(p.id).collection("uploads").orderBy("timestamp","desc").limit(3).get();
+    });
+    Promise.all(promises).then(function(snaps){
+      var acts=[];
+      snaps.forEach(function(snap,pi){
+        snap.forEach(function(doc){
+          var d=doc.data(); d.pid=projs[pi].pid; d.client=projs[pi].client; acts.push(d);
+        });
+      });
+      acts.sort(function(a,b){var ta=a.timestamp?a.timestamp.toDate():new Date(0);var tb=b.timestamp?b.timestamp.toDate():new Date(0);return tb-ta;});
+      var ah="";
+      acts.forEach(function(a){
+        var t=a.timestamp?a.timestamp.toDate():new Date();
+        var tstr=t.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+        var dstr=t.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+        ah+="<div class='arow'><div><div style='font-size:13px;font-weight:700;color:#1a1a2e'>"+a.uploadedBy+"</div><div style='font-size:11px;color:#888'>"+a.pid+" &bull; "+a.type+"</div></div><div style='text-align:right;font-size:11px;color:#aaa'>"+tstr+"<br>"+dstr+"</div></div>";
+      });
+      tact.innerHTML=ah||"<div class='none-msg'>Aaj koi activity nahi</div>";
+    }).catch(function(){tact.innerHTML="<div class='none-msg'>Activity load nahi hui</div>";});
+  }
+}
+
+// ── EDIT PROJECT MODAL ────────────────────────────────
+function openEditModal(pid){
+  var proj=null;PROJECTS.forEach(function(p){if(p.id===pid)proj=p;});
+  if(!proj)return;
+  var et=document.getElementById("editTitle");if(et)et.textContent=proj.pid+" - "+proj.client;
+  document.getElementById("editPid").value=pid;
+  var es=document.getElementById("editStage");if(es)es.value=proj.stage||"Design";
+  var ep=document.getElementById("editPct");if(ep)ep.value=Math.round((parseFloat(proj.pct||0))*100);
+  var er=document.getElementById("editRemarks");if(er)er.value="";
+  var een=document.getElementById("editEngineer");if(een)een.value="";
+  var et2=document.getElementById("editTarget");if(et2)et2.value=proj.targetDate||"";
+  var epay=document.getElementById("editPayment");if(epay)epay.value="0";
+  var ee=document.getElementById("editErr");if(ee)ee.className="err-box";
+  var em=document.getElementById("editModal");if(em)em.className="modal-bg show";
+}
+function closeEditModal(){var em=document.getElementById("editModal");if(em)em.className="modal-bg";}
+function saveEditProject(){
+  var pid=document.getElementById("editPid").value;
+  var stage=document.getElementById("editStage").value;
+  var pct=parseFloat(document.getElementById("editPct").value||0)/100;
+  var remarks=document.getElementById("editRemarks").value.trim();
+  var engineer=document.getElementById("editEngineer").value;
+  var target=document.getElementById("editTarget").value;
+  var payment=parseFloat(document.getElementById("editPayment").value||0);
+  if(!pid)return;
+  var btn=document.getElementById("editSaveBtn");if(btn)btn.disabled=true;
+  showLoader("Update ho raha hai...",30);
+  var updateData={stage:stage,pct:pct,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),updatedBy:CU?CU.name:"MD"};
+  if(remarks)updateData.remarks=remarks;
+  if(engineer)updateData.engineer=engineer;
+  if(target)updateData.targetDate=target;
+  if(payment>0){
+    var proj=null;PROJECTS.forEach(function(p){if(p.id===pid)proj=p;});
+    if(proj&&proj.payment){
+      var newRec=(proj.payment.received||0)+payment;
+      var newBal=(proj.payment.contract||0)-newRec;
+      updateData["payment.received"]=newRec;
+      updateData["payment.balance"]=newBal<0?0:newBal;
+      updateData["payment.status"]=newBal<=0?"Paid":"Partial";
+      tgSend(TG_MD,"PAYMENT RECEIVED\n"+proj.pid+" - "+proj.client+"\nAmount: Rs "+payment.toLocaleString("en-IN")+"\nBy: "+(CU?CU.name:"MD"));
+    }
+  }
+  db.collection("projects").doc(pid).update(updateData).then(function(){
+    hideLoader();if(btn)btn.disabled=false;closeEditModal();
+    tgSend(TG_MD,"PROJECT UPDATED\n"+pid+"\nStage: "+stage+"\nProgress: "+Math.round(pct*100)+"%"+(remarks?"\nRemarks: "+remarks:"")+"\nBy: "+(CU?CU.name:"MD"));
+    loadProjects();loadDash();
+  }).catch(function(e){hideLoader();if(btn)btn.disabled=false;var ee=document.getElementById("editErr");if(ee){ee.textContent="Error: "+e.message;ee.className="err-box show";}});
+}
+</script>
+</body>
+</html>
